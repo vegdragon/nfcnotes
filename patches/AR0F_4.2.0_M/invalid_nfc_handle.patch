@@ -1,0 +1,50 @@
+diff --git a/external/libnfc-nci/halimpl/pn54x/common/phNfcStatus.h b/external/libnfc-nci/halimpl/pn54x/common/phNfcStatus.h
+index 1dabe54..59dbda1 100644
+--- a/external/libnfc-nci/halimpl/pn54x/common/phNfcStatus.h
++++ b/external/libnfc-nci/halimpl/pn54x/common/phNfcStatus.h
+@@ -89,7 +89,7 @@
+ /*
+  * Device specifier/handle value is invalid for the operation
+  */
+-#define NFCSTATUS_INVALID_DEVICE                              (-6)
++#define NFCSTATUS_INVALID_DEVICE                              (0x0006)
+ 
+ /*
+  * The function executed successfully but could have returned
+diff --git a/external/libnfc-nci/halimpl/pn54x/tml/phTmlNfc.c b/external/libnfc-nci/halimpl/pn54x/tml/phTmlNfc.c
+index 53d1bd8..dcf54b5 100644
+--- a/external/libnfc-nci/halimpl/pn54x/tml/phTmlNfc.c
++++ b/external/libnfc-nci/halimpl/pn54x/tml/phTmlNfc.c
+@@ -116,7 +116,7 @@ NFCSTATUS phTmlNfc_Init(pphTmlNfc_Config_t pConfig)
+             if (NFCSTATUS_SUCCESS != wInitStatus)
+             {
+                 wInitStatus = PHNFCSTVAL(CID_NFC_TML, NFCSTATUS_INVALID_DEVICE);
+-                gpphTmlNfc_Context->pDevHandle = (void *) NFCSTATUS_INVALID_DEVICE;
++                gpphTmlNfc_Context->pDevHandle = NULL;
+             }
+             else
+             {
+@@ -375,7 +375,7 @@ static void phTmlNfc_TmlThread(void *pParam)
+             dwNoBytesWrRd = PH_TMLNFC_RESET_VALUE;
+ 
+             /* Read the data from the file onto the buffer */
+-            if (NFCSTATUS_INVALID_DEVICE != (uintptr_t)gpphTmlNfc_Context->pDevHandle)
++            if (NULL != (uintptr_t)gpphTmlNfc_Context->pDevHandle)
+             {
+                 NXPLOG_TML_D("PN54X - Invoking I2C Read.....\n");
+                 dwNoBytesWrRd = phTmlNfc_i2c_read(gpphTmlNfc_Context->pDevHandle, temp, 260);
+ 
+diff --git a/packages/apps/Nfc/nci/jni/extns/pn54x/src/common/phNfcStatus.h b/packages/apps/Nfc/nci/jni/extns/pn54x/src/common/phNfcStatus.h
+index 2eab1a8..1b00355 100755
+--- a/packages/apps/Nfc/nci/jni/extns/pn54x/src/common/phNfcStatus.h
++++ b/packages/apps/Nfc/nci/jni/extns/pn54x/src/common/phNfcStatus.h
+@@ -88,8 +88,7 @@
+ /*
+  * Device specifier/handle value is invalid for the operation
+  */
+-// #define NFCSTATUS_INVALID_DEVICE                              (0x0006)
+-#define NFCSTATUS_INVALID_DEVICE                              (-6)
++#define NFCSTATUS_INVALID_DEVICE                              (0x0006)
+ 
+ /*
+  * The function executed successfully but could have returned
